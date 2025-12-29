@@ -1,16 +1,131 @@
-# React + Vite
+# R3F Character Controller
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **third-person character controller** built with **React Three Fiber (Three.js)** that demonstrates
+**trigonometry-based movement**, **armature-correct skeletal animation**, and **clean gameplay architecture**.
 
-Currently, two official plugins are available:
+This project is intentionally designed as a **portfolio-quality gameplay system**, not a toy demo.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- Trigonometry-based forward and backward movement
+- Y-axis (yaw) rotation for character facing
+- Idle → Walk animation blending
+- Skeletal animations bound correctly to the armature
+- Keyboard-driven input handling
+- Frame-rate–independent motion using `deltaTime`
+- Fullscreen WebGL canvas
+- HUD legend rendered using Drei `<Html />`
+- Clean separation of concerns between scene setup and gameplay logic
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🎮 Controls
+
+| Key | Action |
+|----|------|
+| ↑ Arrow | Move Forward |
+| ↓ Arrow | Move Backward |
+| ← Arrow | Rotate Left |
+| → Arrow | Rotate Right |
+
+---
+
+## 🧠 Technical Overview
+
+### Movement System
+- Player movement is calculated using **sine and cosine** derived from the character’s yaw rotation.
+- Trigonometry is applied at the **group (transform) level**, ensuring movement always aligns with facing direction.
+- All motion is scaled by `deltaTime` to maintain consistent behavior across frame rates.
+
+### Animation System
+- Skeletal animations are bound directly to the **armature**, not the movement group.
+- Only valid animation clips are used (`Idle_State`, `Walking`).
+- Smooth transitions are handled using `fadeIn` / `fadeOut`.
+- Idle animation plays automatically on load.
+
+### Architecture
+- `App.jsx` handles scene setup, lighting, and canvas configuration.
+- `Player.jsx` encapsulates:
+  - Keyboard input handling
+  - Trigonometric movement logic
+  - Rotation logic
+  - Animation state transitions
+
+This structure mirrors real-world engine and gameplay system design patterns.
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+ ├─ App.jsx        # Scene setup and rendering
+ ├─ Player.jsx     # Character controller logic
+ ├─ main.jsx
+ ├─ index.css
+public/
+ └─ Player.glb     # Character model with skeletal animations
+```
+
+---
+
+## 🚀 Getting Started
+
+### Install dependencies
+```bash
+npm install
+```
+
+### Run locally
+```bash
+npm run dev
+```
+
+Then open:
+```
+http://localhost:5173
+```
+
+---
+
+## 🧪 Lessons Learned
+
+- **Not all animation clips in a GLB are usable**  
+  Some clips may be empty or object-level artifacts from export pipelines.
+
+- **Skeletal animations must target the armature**  
+  Binding animations to a transform group results in bind-pose (A-pose) failures.
+
+- **Gameplay motion should be independent from animation playback**  
+  Movement logic and animation logic should remain decoupled.
+
+- **Trigonometry is sufficient at the gameplay layer**  
+  Matrix math is handled internally by the engine and does not need to be exposed at this level.
+
+- **Animations do not auto-play**  
+  All animation states must be explicitly started and managed.
+
+- **Clear separation of concerns improves debuggability**  
+  Isolating responsibilities simplifies iteration and maintenance.
+
+---
+
+## 🔮 Future Improvements
+
+- Run animation with speed-based blending
+- Jump physics with gravity integration
+- Third-person camera follow with smoothing
+- Mobile / touch input support
+- Root-motion vs in-place movement comparison
+- Expanded animation state machine (Jump, Fall, Land)
+
+---
+
+## 👤 Author
+
+**Erick Esquilin**
+
+Built as part of a professional portfolio to demonstrate gameplay systems,
+3D animation handling, and engine-agnostic movement logic.
