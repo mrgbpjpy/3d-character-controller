@@ -1,4 +1,5 @@
 # R3F Character Controller
+**Live Demo:** [R3F Character Controller – Live Demo](https://game-ohy52q85c-mrgbpjpygmailcoms-projects.vercel.app/)
 
 A **third-person character controller** built with **React Three Fiber (Three.js)** that demonstrates
 **trigonometry-based movement**, **armature-correct skeletal animation**, and **clean gameplay architecture**.
